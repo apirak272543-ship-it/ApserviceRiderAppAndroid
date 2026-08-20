@@ -10,6 +10,14 @@ test("Rider shell opens only the Rider web destination", () => {
   assert.doesNotMatch(appSource, /ap-store-mobile\/merchant|Apservicebeta\/admin|ap-retail-pos/);
 });
 
+test("Rider shell limits WebView navigation to AP Service hosts", () => {
+  assert.match(appSource, /const ALLOWED_HOSTS = new Set\(\["apirak272543-ship-it\.github\.io", "abtsctwfkgzciseppach\.supabase\.co"\]\)/);
+  assert.match(appSource, /parsed\.protocol === "https:" && ALLOWED_HOSTS\.has\(parsed\.hostname\)/);
+  assert.match(appSource, /onShouldStartLoadWithRequest=\{handleNavigation\}/);
+  assert.match(appSource, /Linking\.openURL\(request\.url\)/);
+  assert.ok(!appSource.includes('originWhitelist={["https://*", "http://*"]}'));
+});
+
 test("Rider shell retains foreground location support", () => {
   assert.match(appSource, /geolocationEnabled/);
   assert.match(appConfig, /ACCESS_FINE_LOCATION/);
