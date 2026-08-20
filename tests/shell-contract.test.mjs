@@ -15,3 +15,11 @@ test("Rider shell retains foreground location support", () => {
   assert.match(appConfig, /ACCESS_FINE_LOCATION/);
   assert.match(appConfig, /FOREGROUND_SERVICE_LOCATION/);
 });
+
+test("Rider shell keeps notification support and avoids background location permission", () => {
+  assert.match(appSource, /onMessage/);
+  assert.match(appSource, /notification/);
+  assert.match(appConfig, /expo-notifications/);
+  assert.match(appConfig, /POST_NOTIFICATIONS/);
+  assert.doesNotMatch(appConfig, /ACCESS_BACKGROUND_LOCATION/);
+});
